@@ -9,8 +9,11 @@ pip install mysql-connector-python
 # Instalar dependencias
 ```
 pip install mysql-connector-python
+pip install Flask
 ```
-# Ejecutar el ejemplo
+# Ejecutar flask
 ```
-python .\prueba.py 
+python .\__init__.py 
 ```
+# Subir Bd 
+El archivo es el rotonda.sql
