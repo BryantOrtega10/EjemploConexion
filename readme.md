@@ -1,6 +1,6 @@
 # Crear venv
 ```
-pip install mysql-connector-python
+python -m venv venv
 ```
 # Activar venv
 ```

@@ -8,7 +8,7 @@ class MysqlConnection(Connector):
             host="localhost",
             user="root",
             password="",
-            database="concrete"
+            database="rotonda"
         )
         self.__cursor = self.__connector.cursor()
 
