@@ -9,6 +9,7 @@ ACTIVE_ENDPOINTS = [
 
 def create_app(config=DevelpmentConfig):
     app = Flask(__name__)
+    app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
     app.config.from_object(config)
     
     for url, blueprint in ACTIVE_ENDPOINTS:

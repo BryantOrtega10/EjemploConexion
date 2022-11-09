@@ -1,3 +1,6 @@
+# Versiones
+V 0.0.3 - Se realiza el crud de ingredientes
+
 # Crear venv
 ```
 python -m venv venv

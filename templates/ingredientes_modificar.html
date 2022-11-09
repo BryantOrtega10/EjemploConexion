@@ -5,7 +5,7 @@
 {% endblock %}
 {% block header %}
 <div class="container">
-    <h1>Agregar Ingredientes</h1>
+    <h1>Modificar Ingredientes</h1>
 </div>
 {% endblock %}
 {% block content %}
@@ -13,7 +13,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{url_for('ingredientes.ingredientes_lista')}}">Ingredientes</a></li>
-            <li class="breadcrumb-item"><a href="{{url_for('ingredientes.ingredientes_agregar')}}">Agregar</a></li>
+            <li class="breadcrumb-item"><a href="{{url_for('ingredientes.ingredientes_modificar',id=ingrediente.id_ingrediente)}}">Modificar</a></li>
         </ol>
     </nav>
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -29,16 +29,21 @@
         <div class="col-sm-12 col-md-6">
             <form method="post" enctype="multipart/form-data" class="form-floating">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre:">
+                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre:" value="{{ingrediente.nombre}}">
                     <label for="floatingInput">Nombre <span class="ob">(*)</span>:</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="und_medida" id="und_medida"
-                        placeholder="Unidad Media">
+                    <input type="text" class="form-control" name="und_medida" id="und_medida" 
+                        placeholder="Unidad Media" value="{{ingrediente.und_medida}}">
                     <label for="floatingInput">Unidad Media <span class="ob">(*)</span>:</label>
                 </div>
                 <div class="mb-3">
-                    <label for="foto" class="form-label">Foto</label>
+                    <label for="foto" class="form-label">Foto Actual</label><br>
+                    <img src="{{url_for('static', filename='uploads/'+ingrediente.foto)}}" alt="{{ingrediente.nombre}}" class="w-50" />
+                    <input type="hidden" name="foto_ant" value="{{ingrediente.foto}}">
+                </div>
+                <div class="mb-3">
+                    <label for="foto" class="form-label">Nueva Foto</label>
                     <input class="form-control" accept="image/*" type="file" name="foto" id="foto">
                 </div>
                 <input type="submit" class="btn btn-success w-100" value="Agregar" />
