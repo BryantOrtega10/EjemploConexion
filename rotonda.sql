@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-11-2022 a las 03:32:52
--- Versión del servidor: 10.4.21-MariaDB
--- Versión de PHP: 7.3.31
+-- Tiempo de generación: 18-11-2022 a las 00:37:39
+-- Versión del servidor: 10.4.13-MariaDB
+-- Versión de PHP: 7.4.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -22,7 +22,7 @@ SET time_zone = "+00:00";
 --
 
 -- --------------------------------------------------------
-
+z
 --
 -- Estructura de tabla para la tabla `adicion`
 --
@@ -30,16 +30,17 @@ SET time_zone = "+00:00";
 CREATE TABLE `adicion` (
   `id_adicion` bigint(20) UNSIGNED NOT NULL,
   `cantidad` float DEFAULT NULL,
-  `fk_ingrediente` bigint(20) UNSIGNED NOT NULL
+  `fk_ingrediente` bigint(20) UNSIGNED NOT NULL,
+  `maximo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `adicion`
 --
 
-INSERT INTO `adicion` (`id_adicion`, `cantidad`, `fk_ingrediente`) VALUES
-(101, 1, 101),
-(213, 1, 13);
+INSERT INTO `adicion` (`id_adicion`, `cantidad`, `fk_ingrediente`, `maximo`) VALUES
+(101, 1, 101, 10),
+(213, 1, 13, 10);
 
 -- --------------------------------------------------------
 
@@ -200,7 +201,8 @@ INSERT INTO `ingrediente` (`id_ingrediente`, `nombre`, `foto`, `und_medida`) VAL
 (102, 'SALSA BOLOÑESA', 'albondiga.jpg', 'gr'),
 (103, 'GASEOSA MANZANA POSTOBON 200ML', 'gaseosaManzana200.png', 'unidad'),
 (104, 'GASEOSA PEPSI 200ML', 'gaseosaPepsi200.png', 'unidad'),
-(105, 'GASEOSA COLOMBIANA POSTOBON 200ML', 'gaseosaColombiana200.png', 'unidad');
+(105, 'GASEOSA COLOMBIANA POSTOBON 200ML', 'gaseosaColombiana200.png', 'unidad'),
+(106, 'Patacones', 'reunion_14.png', 'Unidad');
 
 -- --------------------------------------------------------
 
@@ -319,6 +321,17 @@ INSERT INTO `item_carrito_ingrediente_base` (`fk_item_carrito`, `fk_ingrediente_
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `item_carrito_producto`
+--
+
+CREATE TABLE `item_carrito_producto` (
+  `fk_item_carrito` bigint(20) UNSIGNED NOT NULL,
+  `fk_producto` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `menu`
 --
 
@@ -335,7 +348,7 @@ CREATE TABLE `menu` (
 --
 
 INSERT INTO `menu` (`id_menu`, `nombre`, `foto`, `precio`, `fk_restaurante`) VALUES
-(101, 'COMBO PASTA BOLOÑESA', 'comboPastaBoloniesa.png', 20000, 3),
+(101, 'COMBO PASTA BOLOÑESA', 'comboPastaBoloniesa.png', 22000, 3),
 (1011, 'COMBO MCCOMBO', 'combomccombo.png', 25000, 1);
 
 -- --------------------------------------------------------
@@ -388,6 +401,7 @@ INSERT INTO `pedido` (`idpedido`, `estado`, `metodo_pago`, `total`, `fk_carrito`
 CREATE TABLE `producto` (
   `id_producto` bigint(20) UNSIGNED NOT NULL,
   `nombre` varchar(100) NOT NULL,
+  `precio` bigint(20) NOT NULL,
   `tipo` tinyint(3) UNSIGNED NOT NULL COMMENT '0- Entrada\n1- Plato Fuerte\n2- Postres\n3- Bebidas\n4- Acompañamientos',
   `foto` varchar(200) NOT NULL,
   `maximo_ingredientes_base` int(10) UNSIGNED NOT NULL,
@@ -401,10 +415,10 @@ CREATE TABLE `producto` (
 -- Volcado de datos para la tabla `producto`
 --
 
-INSERT INTO `producto` (`id_producto`, `nombre`, `tipo`, `foto`, `maximo_ingredientes_base`, `aplica_maximo`, `minimo_ingredientes_base`, `aplica_minimo`, `fk_restaurante`) VALUES
-(101, 'PASTA BOLOÑESA', 1, 'pastaBoloniesa.jpg', 0, 0, 0, 0, 3),
-(102, 'GASEOSA MANZANA 200 ML', 3, 'gaseosaManzana200.jpg', 0, 0, 0, 0, 3),
-(1003, 'HAMBURGUESA MCNIFICA', 1, 'mcnifica.jpg', 9, 1, 2, 1, 1);
+INSERT INTO `producto` (`id_producto`, `nombre`, `precio`, `tipo`, `foto`, `maximo_ingredientes_base`, `aplica_maximo`, `minimo_ingredientes_base`, `aplica_minimo`, `fk_restaurante`) VALUES
+(101, 'PASTA BOLOÑESA', 20000, 1, 'pastaBoloniesa.jpg', 0, 0, 0, 0, 3),
+(102, 'GASEOSA MANZANA 200 ML', 2500, 3, 'gaseosaManzana200.jpg', 0, 0, 0, 0, 3),
+(1003, 'HAMBURGUESA MCNIFICA', 28000, 1, 'mcnifica.jpg', 9, 1, 2, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -424,6 +438,7 @@ CREATE TABLE `producto_adicion` (
 
 INSERT INTO `producto_adicion` (`fk_producto`, `fk_adicion`, `precio`) VALUES
 (101, 101, 5000),
+(101, 213, 9900),
 (1003, 213, 18000);
 
 -- --------------------------------------------------------
@@ -646,6 +661,13 @@ ALTER TABLE `item_carrito_ingrediente_base`
   ADD KEY `fk_item_carrito_ingrediente_base_producto1_idx` (`fk_producto`);
 
 --
+-- Indices de la tabla `item_carrito_producto`
+--
+ALTER TABLE `item_carrito_producto`
+  ADD PRIMARY KEY (`fk_item_carrito`,`fk_producto`),
+  ADD KEY `fk_producto` (`fk_producto`);
+
+--
 -- Indices de la tabla `menu`
 --
 ALTER TABLE `menu`
@@ -762,7 +784,7 @@ ALTER TABLE `horario`
 -- AUTO_INCREMENT de la tabla `ingrediente`
 --
 ALTER TABLE `ingrediente`
-  MODIFY `id_ingrediente` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+  MODIFY `id_ingrediente` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT de la tabla `ingrediente_base`
@@ -876,6 +898,13 @@ ALTER TABLE `item_carrito_ingrediente_base`
   ADD CONSTRAINT `fk_item_carrito_has_ingrediente_base_ingrediente_base1` FOREIGN KEY (`fk_ingrediente_base`) REFERENCES `ingrediente_base` (`id_ingrediente_base`),
   ADD CONSTRAINT `fk_item_carrito_has_ingrediente_base_item_carrito1` FOREIGN KEY (`fk_item_carrito`) REFERENCES `item_carrito` (`id_item_carrito`),
   ADD CONSTRAINT `fk_item_carrito_ingrediente_base_producto1` FOREIGN KEY (`fk_producto`) REFERENCES `producto` (`id_producto`);
+
+--
+-- Filtros para la tabla `item_carrito_producto`
+--
+ALTER TABLE `item_carrito_producto`
+  ADD CONSTRAINT `item_carrito_producto_ibfk_1` FOREIGN KEY (`fk_item_carrito`) REFERENCES `item_carrito` (`id_item_carrito`),
+  ADD CONSTRAINT `item_carrito_producto_ibfk_2` FOREIGN KEY (`fk_producto`) REFERENCES `producto` (`id_producto`);
 
 --
 -- Filtros para la tabla `menu`
