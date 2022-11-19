@@ -1,6 +1,6 @@
 class Carrito:
 
-    def __init__(self, idCarrito,subTotal, itemsCarrito, cliente, fechaFinalizacion, estado):
+    def __init__(self, idCarrito, subTotal, itemsCarrito, cliente, fechaFinalizacion, estado):
         self.__idCarrito = idCarrito
         self.__subTotal = subTotal
         self.__itemsCarrito = itemsCarrito
@@ -8,6 +8,41 @@ class Carrito:
         self.__fechaFinalizacion = fechaFinalizacion
         self.__estado = estado
 
+    def getIdCarrito(self):
+        return self.__idCarrito
+
+    def setIdCarrito(self, value):
+        self.__idCarrito = value
+
+    def getSubTotal(self):
+        return self.__subTotal
+
+    def setSubTotal(self, value):
+        self.__subTotal = value
+
+    def getItemsCarrito(self):
+        return self.__itemsCarrito
+
+    def setItemsCarrito(self, value):
+        self.__itemsCarrito = value
+
+    def getCliente(self):
+        return self.__cliente
+
+    def setCliente(self, value):
+        self.__cliente = value
+
+    def getFechaFinalizacion(self):
+        return self.__fechaFinalizacion
+
+    def setFechaFinalizacion(self, value):
+        self.__fechaFinalizacion = value
+
+    def getEstado(self):
+        return self.__estado
+
+    def setEstado(self, value):
+        self.__estado = value
 
     def calcularValor(self):
         precioCarrito = 0
