@@ -1,4 +1,6 @@
 from app.logica.MenuControlador import MenuControlador
+from app.objetos_sesion.Producto import Producto
+
 
 class Menu:
 
@@ -17,13 +19,29 @@ class Menu:
         self.__menuControlador = MenuControlador()
 
     def setBdInfoMenu(self, id):
-        infoProducto = self.__menuControlador.obtener_x_id(id)
-        if infoProducto:
-            infoProducto = infoProducto[0]
-            self.__idMenu = infoProducto["id_menu"]
-            self.__nombre = infoProducto["nombre"]
-            self.__foto = infoProducto["foto"]
-            self.__precio = infoProducto["precio"]
+        infoMenu = self.__menuControlador.obtener_x_id(id)
+        if infoMenu:
+            menu = infoMenu['menu']
+            self.__idMenu = menu["id_menu"]
+            self.__nombre = menu["nombre"]
+            self.__foto = menu["foto"]
+            self.__precio = menu["precio"]
+
+        for producto in infoMenu['productos']:
+            producto_obj = Producto()
+            producto_obj.setBdInfoProducto(producto['fk_producto'])
+
+            if producto_obj.getTipoProducto() == 0:
+                self.__entrada = producto_obj
+            elif producto_obj.getTipoProducto() == 1:
+                self.__platoFuerte = producto_obj
+            elif producto_obj.getTipoProducto() == 2:
+                self.__postre = producto_obj
+            elif producto_obj.getTipoProducto() == 3:
+                self.__bebida = producto_obj
+            elif producto_obj.getTipoProducto() == 4:
+                self.__acompanamiento = producto_obj
+
 
     def getIdMenu(self):
         return self.__idMenu

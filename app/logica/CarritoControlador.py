@@ -1,6 +1,7 @@
 import os
+
 from app.datos.CarritoModelo import CarritoModelo
-from werkzeug.utils import secure_filename
+from app.datos.ItemCarritoModelo import ItemCarritoModelo
 
 
 class CarritoControlador:
@@ -28,3 +29,7 @@ class CarritoControlador:
     def eliminar(self, id):
         res = self.__modelo.eliminar(id)
         return res
+
+    def obtener_info_items_carrito(self, id_carrito):
+        itemCarrito_modelo = ItemCarritoModelo()
+        return itemCarrito_modelo.obtenerPorCarrito(id_carrito)

@@ -1,6 +1,5 @@
-from app.objetos_sesion.Ingrediente import Ingrediente
-from app.logica.IngredienteControlador import IngredienteControlador
 from app.logica.AdicionControlador import AdicionControlador
+from app.objetos_sesion.Ingrediente import Ingrediente
 
 
 class Adicion(Ingrediente):
@@ -14,14 +13,14 @@ class Adicion(Ingrediente):
 
         self.__adicionControlador = AdicionControlador()
 
-    def setBdInfoAdicion(self, id_adicion):
+    def setBdInfoAdicion(self, id_adicion, precio):
         infoAdicion = self.__adicionControlador.obtener_x_id(id_adicion)
         if infoAdicion:
             infoAdicion = infoAdicion[0]
             self.__idAdicion = infoAdicion["id_adicion"]
             self.__cantidadPorUnidad = infoAdicion['cantidad']
             self.__maximo = infoAdicion['maximo']
-            self.__precio = infoAdicion['precio']
+            self.__precio = precio
             self.setBdInfoIngrediente(infoAdicion['fk_ingrediente'])
 
     def getIdAdicion(self):

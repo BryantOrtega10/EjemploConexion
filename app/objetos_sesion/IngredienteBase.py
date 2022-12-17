@@ -1,13 +1,26 @@
+from app.logica.IngredienteBaseControlador import IngredienteBaseControlador
 from app.objetos_sesion.Ingrediente import Ingrediente
+
 
 class IngredienteBase(Ingrediente):
 
-    def __init__(self, idIngrediente, nombre, foto, undMedida, idIngredienteBase, ingredientesCambio, cantidadPorUnidad, autoSelect):
+    def __init__(self, idIngrediente="", nombre="", foto="", undMedida="", idIngredienteBase="", cantidadPorUnidad="", autoSelect=""):
         super().__init__(idIngrediente,nombre,foto,undMedida)
         self.__idIngredienteBase = idIngredienteBase
-        self.__ingredientesCambio = ingredientesCambio
         self.__cantidadPorUnidad = cantidadPorUnidad
         self.__autoSelect = autoSelect
+
+        self.__ingredienteBaseControlador = IngredienteBaseControlador()
+
+    def setBdInfoIngredienteBase(self, id_ingrediente_base, auto_select):
+        infoIngredienteBase = self.__ingredienteBaseControlador.obtener_x_id(id_ingrediente_base)
+        if infoIngredienteBase:
+            infoIngredienteBase = infoIngredienteBase[0]
+            self.__idIngredienteBase = infoIngredienteBase['id_ingrediente_base']
+            self.__cantidadPorUnidad = infoIngredienteBase['cantidad']
+            self.__autoSelect = auto_select
+            self.setBdInfoIngrediente(infoIngredienteBase['fk_ingrediente'])
+
 
     def getIdIngredienteBase(self):
         return self.__idIngredienteBase

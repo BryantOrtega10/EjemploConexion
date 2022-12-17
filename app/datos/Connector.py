@@ -1,14 +1,15 @@
-from abc import abstractmethod
 from abc import ABCMeta
+from abc import abstractmethod
+
 
 class Connector(metaclass=ABCMeta):
    
     @abstractmethod
-    def select(self, fields=["*"], tables=[], where="", values=[] , order_by=[], group_by=[], from_s=0, limit=None):
+    def select(self, fields=['*'], tables=[], where='', values=[] , order_by=[], group_by=[], from_s=0, limit=None):
         pass
 
     @abstractmethod
-    def update(self, table, update=[], where="", values={}):
+    def update(self, table, update=[], where='', values={}):
         pass
 
     @abstractmethod
@@ -16,7 +17,7 @@ class Connector(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def delete(self, table, where="", values={}):
+    def delete(self, table, where='', values={}):
         pass
 
     @abstractmethod
