@@ -1,6 +1,9 @@
 import os
-from app.datos.MenuModelo import MenuModelo
+
 from werkzeug.utils import secure_filename
+
+from app.datos.MenuModelo import MenuModelo
+from app.datos.MenuProductoModelo import MenuProductoModelo
 
 
 class MenuControlador:
@@ -14,8 +17,13 @@ class MenuControlador:
         return menus
 
     def obtener_x_id(self, id):
+        respuesta = {}
         menu = self.__modelo.obtenerUno(id)
-        return menu
+        if menu:
+            respuesta['menu'] = menu[0]
+            respuesta['productos'] = self.obtener_info_menu_productos(id)
+
+        return respuesta
 
     def agregar(self, request):
         foto = ''
@@ -46,3 +54,8 @@ class MenuControlador:
     def eliminar(self, id):
         res = self.__modelo.eliminar(id)
         return res
+
+    def obtener_info_menu_productos(self, id_menu):
+        menu_producto_modelo = MenuProductoModelo()
+
+        return menu_producto_modelo.obtenerFKProductos(id_menu)

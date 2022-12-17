@@ -1,9 +1,7 @@
-import os
 from app.datos.IngredienteBaseModelo import IngredienteBaseModelo
-from werkzeug.utils import secure_filename
 
 
-class IngredienteControlador:
+class IngredienteBaseControlador:
 
     def __init__(self):
         self.__modelo = IngredienteBaseModelo()

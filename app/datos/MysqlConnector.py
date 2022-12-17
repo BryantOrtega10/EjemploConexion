@@ -1,5 +1,7 @@
-from app.datos.Connector import Connector
 import mysql.connector
+
+from app.datos.Connector import Connector
+
 
 class MysqlConnection(Connector):
     
@@ -13,10 +15,10 @@ class MysqlConnection(Connector):
         self.__cursor = self.__connector.cursor(dictionary=True)
 
 
-    def select(self, fields=["*"], tables=[], where="", values={} , order_by=[], group_by=[], from_s=0, limit=None):
+    def select(self, fields=["*"], tables=[], where='', values={} , order_by=[], group_by=[], from_s=0, limit=None):
         sql = "SELECT " + (','.join(fields)) + " FROM " + (','.join(tables)) 
         
-        if where != "":
+        if where != '':
             sql += " WHERE " + where
         if len(group_by) > 0:
             sql += " GROUP BY " + (','.join(group_by))
@@ -26,12 +28,12 @@ class MysqlConnection(Connector):
             sql += " LIMIT " + str(limit)
         if from_s > 0:
             sql += " OFFSET " + str(from_s)
-        self.__cursor.execute(sql,values)
+        self.__cursor.execute(sql, values)
 
         return self.__cursor.fetchall()
 
 
-    def update(self, table, update=[], where="", values={}):
+    def update(self, table, update=[], where='', values={}):
         try:
             sql = "UPDATE " + table + " SET " + (','.join(upd+"=%("+upd+")s" for upd in update)) + " WHERE " + where
             self.__cursor.execute(sql, values)
@@ -53,7 +55,7 @@ class MysqlConnection(Connector):
 
 
 
-    def delete(self, table, where="", values={}):
+    def delete(self, table, where='', values={}):
         try:
             sql = "DELETE FROM " + table + " WHERE " + where
             self.__cursor.execute(sql, values)

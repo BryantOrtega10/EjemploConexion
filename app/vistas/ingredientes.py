@@ -1,4 +1,5 @@
 from flask import Blueprint, flash, request, render_template, redirect, url_for
+
 from app.logica.IngredienteControlador import IngredienteControlador
 
 controlador = IngredienteControlador()

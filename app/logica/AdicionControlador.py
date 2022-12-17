@@ -1,6 +1,4 @@
-import os
 from app.datos.AdicionModelo import AdicionModelo
-from werkzeug.utils import secure_filename
 
 
 class AdicionControlador:

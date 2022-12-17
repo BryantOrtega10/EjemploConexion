@@ -1,7 +1,7 @@
 from flask import Flask
-from conf.config import DevelpmentConfig
 
 from app.vistas.ingredientes import ingredientes_bp
+from conf.config import DevelpmentConfig
 
 ACTIVE_ENDPOINTS = [
     ('/ingredientes',ingredientes_bp),

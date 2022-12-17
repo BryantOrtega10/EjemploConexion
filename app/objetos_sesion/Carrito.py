@@ -1,12 +1,39 @@
+from app.logica.CarritoControlador import CarritoControlador
+from app.objetos_sesion.ItemCarrito import ItemCarrito
+
+
 class Carrito:
 
-    def __init__(self, idCarrito, subTotal, itemsCarrito, cliente, fechaFinalizacion, estado):
+    def __init__(self, idCarrito="", subTotal="", itemsCarrito=[], cliente=None, fechaCreacion="", fechaFinalizacion="", estado=""):
         self.__idCarrito = idCarrito
         self.__subTotal = subTotal
         self.__itemsCarrito = itemsCarrito
         self.__cliente = cliente
+        self.__fechaCreacion = fechaCreacion
         self.__fechaFinalizacion = fechaFinalizacion
         self.__estado = estado
+
+        self.__carritoControlador = CarritoControlador()
+
+    def setBdInfoCarrito(self, id_carrito):
+        carrito = self.__carritoControlador.obtener_x_id(id_carrito)
+        if carrito:
+            carrito = carrito[0]
+            self.__idCarrito = carrito['id_carrito']
+            self.__subTotal = carrito['sub_total']
+            self.__fechaCreacion = carrito['fecha_creacion']
+            self.__fechaFinalizacion = carrito['fecha_finalizacion']
+            self.__estado = carrito['estado']
+            # self.__cliente = ClienteControlador.obtener_x_id(carrito['fk_cliente'])
+
+            itemsCarrito = self.__carritoControlador.obtener_info_items_carrito(id_carrito)
+            if itemsCarrito:
+                for itemCarrito in itemsCarrito:
+                    itemCarrito_obj = ItemCarrito()
+                    itemCarrito_obj.setBdInfoItemCarrito(itemCarrito['id_item_carrito'])
+                    self.__itemsCarrito.append(itemCarrito_obj)
+
+
 
     def getIdCarrito(self):
         return self.__idCarrito
