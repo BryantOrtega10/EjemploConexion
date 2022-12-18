@@ -26,3 +26,12 @@ class MenuProductoModelo:
                                           values={'id_menu': id_menu})
         else:
             return {'success': False, 'error': "Id de menu vacio"}
+
+    def eliminarPorMenu(self, id_menu):
+        res = self.__conector.delete(table='menu_producto',
+                                     where='fk_menu=%(id_menu)s',
+                                     values={'id_menu': id_menu})
+        if res['success']:
+            self.__conector.commit()
+
+        return res

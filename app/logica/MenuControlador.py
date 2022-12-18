@@ -36,6 +36,22 @@ class MenuControlador:
         res = self.__modelo.agregar(request.form.get('nombre'), foto, request.form.get('precio'), request.form.get('id_restaurante'))
         return res
 
+    def tempAgregar(self, request):
+        res = self.__modelo.agregar(nombre=request['nombre'],
+                                    foto=request['foto'],
+                                    precio=request['precio'],
+                                    id_restaurante=request['id_restaurante'])
+
+        if res['success']:
+            id_menu = res['row_id']
+            menu_producto_modelo = MenuProductoModelo()
+            for producto in request['productos']:
+                res = menu_producto_modelo.agregar(id_menu=id_menu, id_producto=producto['id_producto'])
+
+            res['row_id'] = id_menu
+
+        return res
+
     def modificar(self, id, request):
         menu = self.__modelo.obtenerUno(id)
         menu = menu[0]
@@ -52,7 +68,10 @@ class MenuControlador:
         return res
 
     def eliminar(self, id):
-        res = self.__modelo.eliminar(id)
+        menu_producto_modelo = MenuProductoModelo()
+        res = menu_producto_modelo.eliminarPorMenu(id_menu=id)
+        if res['success']:
+            res = self.__modelo.eliminar(id_menu=id)
         return res
 
     def obtener_info_menu_productos(self, id_menu):

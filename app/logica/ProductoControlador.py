@@ -45,10 +45,63 @@ class ProductoControlador:
                 foto = secure_filename(file.filename)
                 file.save(os.path.join(self.__UPLOAD_FOLDER, foto))
 
-        res = self.__modelo.agregar(request.form.get('nombre'), request.form.get('precio'), request.form.get('tipo'),
-                                    request.form.get('foto'), request.form.get('maximo_ingredientes_base'),
-                                    request.form.get('aplica_maximo'), request.form.get('minimo_ingredientes_base'),
-                                    request.form.get('aplica_minimo'), request.form.get('id_restaurante'))
+        tipoProducto = ['Entrada ', 'Plato Fuerte', 'Postre', 'Bebida', 'Acompañamiento']
+        tipoProducto = tipoProducto.index(request.form.get('tipo'))
+        if request.form.get('aplica_maximo'):
+            aplica_maximo = 1
+        else:
+            aplica_maximo = 0
+        if request.form.get('aplica_minimo'):
+            aplica_minimo = 1
+        else:
+            aplica_minimo = 0
+        res = self.__modelo.agregar(nombre=request.form.get('nombre'), precio=int(request.form.get('precio')), tipo=tipoProducto,
+                                    foto=foto, maximo_ingredientes_base=int(request.form.get('maximo_ingredientes_base')),
+                                    aplica_maximo=aplica_maximo, minimo_ingredientes_base=int(request.form.get('minimo_ingredientes_base')),
+                                    aplica_minimo=aplica_minimo, id_restaurante=int(request.form.get('id_restaurante')))
+        if res['success']:
+            id_producto = res['row_id']
+            adicion_modelo = ProductoAdicionModelo()
+            producto_ingrediente_base_modelo = ProductoIngredienteBaseModelo()
+            for i in range(len(request.form.getlist('adiciones[]'))):
+                res = adicion_modelo.agregar(id_producto=id_producto, id_adicion=int(request.form.get(f'id_adicion{i}')),
+                                             precio=int(request.form.get(f'precio{i}')))
+                if not res['success']:
+                    break
+            if res['success']:
+                for i in range(len(request.form.getlist('ingresBase[]'))):
+                    if request.form.get(f'auto_select{i}'):
+                        auto_select = 1
+                    else:
+                        auto_select = 0
+                    res = producto_ingrediente_base_modelo.agregar(id_producto=id_producto,
+                                                                   id_ingrediente_base=int(request.form.get(f'id_ingrediente_base{i}')),
+                                                                   auto_select=auto_select)
+                    if not res['success']:
+                        break
+            res['row_id'] = id_producto
+
+        return res
+
+    # para probar con un diccionario que ejecute bien
+    def tempAgregar(self, request):
+        res = self.__modelo.agregar(request['nombre'], request['precio'], request['tipo'],
+                                    request['foto'], request['maximo_ingredientes_base'],
+                                    request['aplica_maximo'], request['minimo_ingredientes_base'],
+                                    request['aplica_minimo'], request['id_restaurante'])
+
+        if res['success']:
+            id_producto = res['row_id']
+            adicion_modelo = ProductoAdicionModelo()
+            producto_ingrediente_base_modelo = ProductoIngredienteBaseModelo()
+            for adicion in request['adiciones']:
+                res = adicion_modelo.agregar(id_producto=id_producto, id_adicion=adicion['id_adicion'], precio=adicion['precio'])
+
+            for ingrediente_base in request['ingredientes_base']:
+                res = producto_ingrediente_base_modelo.agregar(id_producto=id_producto,
+                                                               id_ingrediente_base=ingrediente_base['id_ingrediente_base'],
+                                                               auto_select=ingrediente_base['auto_select'])
+            res['row_id'] = id_producto
         return res
 
     def modificar(self, id, request):
@@ -71,7 +124,14 @@ class ProductoControlador:
         return res
 
     def eliminar(self, id):
-        res = self.__modelo.eliminar(id)
+        producto_ingrediente_base_modelo = ProductoIngredienteBaseModelo()
+        producto_adicion_modelo = ProductoAdicionModelo()
+
+        res = producto_ingrediente_base_modelo.eliminarPorProducto(id_producto=id)
+        if res['success']:
+            res = producto_adicion_modelo.eliminarPorProducto(id_producto=id)
+        if res['success']:
+            res = self.__modelo.eliminar(id)
         return res
 
     # Trae la informacion para relacionar al producto con sus ingredientes
@@ -91,8 +151,6 @@ class ProductoControlador:
     def obtener_info_producto_adiciones(self, id_producto):
         respuesta = []
         producto_adicion_modelo = ProductoAdicionModelo()
-        adicion_modelo = AdicionModelo()
-        ingrediente_modelo = IngredienteModelo()
 
         infoTabla = producto_adicion_modelo.obtenerFKAdiciones(id_producto)
         if infoTabla:
