@@ -1,0 +1,35 @@
+{% extends "base_pag.html" %}
+{% block title %} ROTONDA {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {% if session['usuario'] %}
+        <h1 class="text-center">Bienvenido {{session['usuario']}}</h1>
+        {% endif %}
+        
+        <section class="restaurantes">
+            <h3 class="text-center">Selecciona un restaurante</h3>
+            <div class="row">
+                {% for restaurante in lista_restaurantes %}
+                    <div class="col-4">
+                        <a href="{{url_for('pagina.pagina_menu_restaurante',id=restaurante.id_restaurante)}}">
+                            <img src="{{url_for('static', filename='uploads/'+restaurante.logo)}}" alt="{{restaurante.nombre}}" class="w-100" />
+                            <h5>{{restaurante.nombre}}</h5>
+                        </a>                       
+                    </div>                    
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+{% endblock %}

@@ -20,9 +20,9 @@ class MenuProductoModelo:
 
     def obtenerFKProductos(self, id_menu):
         if id_menu != '':
-            return self.__conector.select(fields=['fk_producto'],
-                                          tables=['menu_producto'],
-                                          where='fk_menu=%(id_menu)s',
+            return self.__conector.select(fields=['fk_producto','tipo'],
+                                          tables=['menu_producto','producto'],
+                                          where='menu_producto.fk_producto = producto.id_producto and fk_menu=%(id_menu)s',
                                           values={'id_menu': id_menu})
         else:
             return {'success': False, 'error': "Id de menu vacio"}

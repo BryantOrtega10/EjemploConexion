@@ -23,8 +23,13 @@ class ProductoAdicionModelo:
 
     def obtenerFKAdiciones(self, id_producto):
         if id_producto != '':
-            res = self.__conector.select(fields=["fk_adicion, precio"],
-                                         tables=["producto_adicion"],
-                                         where="fk_producto=%(id_producto)s",
+            res = self.__conector.select(fields=["producto_adicion.fk_adicion", 
+                                                 "producto_adicion.precio",
+                                                 "adicion.maximo",
+                                                 "ingrediente.*"],
+                                         tables=["producto_adicion","adicion","ingrediente"],
+                                         where=" producto_adicion.fk_adicion = adicion.id_adicion and "\
+                                               " adicion.fk_ingrediente = ingrediente.id_ingrediente and "\
+                                               " producto_adicion.fk_producto=%(id_producto)s",
                                          values={"id_producto": id_producto})
             return res

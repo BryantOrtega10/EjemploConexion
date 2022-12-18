@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 
 from app.datos.MenuModelo import MenuModelo
 from app.datos.MenuProductoModelo import MenuProductoModelo
+from app.datos.ProductoModelo import ProductoModelo
 
 
 class MenuControlador:
@@ -15,6 +16,10 @@ class MenuControlador:
     def lista(self):
         menus = self.__modelo.obtener()
         return menus
+    
+    def lista_por_restaurante(self, id_rest):
+        menus = self.__modelo.obtener_x_rest(id_rest)
+        return menus
 
     def obtener_x_id(self, id):
         respuesta = {}
@@ -22,6 +27,11 @@ class MenuControlador:
         if menu:
             respuesta['menu'] = menu[0]
             respuesta['productos'] = self.obtener_info_menu_productos(id)
+            respuesta['entrada'] = None
+            respuesta['platoFuerte'] = None
+            respuesta['bebida'] = None
+            respuesta['postre'] = None
+            respuesta['acompanamiento'] = None
 
         return respuesta
 
