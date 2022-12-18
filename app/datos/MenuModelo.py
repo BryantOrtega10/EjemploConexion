@@ -25,6 +25,10 @@ class MenuModelo:
     def obtener(self, limite=None):
         res = self.__conector.select(tables=["menu"], limit=limite)
         return res
+    
+    def obtener_x_rest(self, fk_restaurante, limite=None):
+        res = self.__conector.select(tables=["menu"], where=' fk_restaurante=%(fk_restaurante)s', values={"fk_restaurante":fk_restaurante}, limit=limite)
+        return res
 
     def obtenerUno(self, id):
         res = self.__conector.select(tables=["menu"], where=' id_menu=%(id_menu)s', values={"id_menu":id})

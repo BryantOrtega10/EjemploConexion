@@ -1,0 +1,115 @@
+{% extends "base_pag.html" %}
+{% block title %} ROTONDA {% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div class="restaurante">
+        <div class="row">
+            <div class="col-1"><img src="{{url_for('static', filename='uploads/'+restaurante.logo)}}"
+                    alt="{{restaurante.nombre}}" class="w-100" /></div>
+            <div class="col-10">
+                <h1>{{ producto.producto.nombre }}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="producto">
+        <div class="row">
+            <div class="col-4">
+                <img src="{{url_for('static', filename='uploads/'+producto.producto.foto)}}" alt="{{producto.producto.nombre}}"
+                    class="w-100" />
+            </div>
+            <div class="col-8">
+                <div class="accordion" id="accordionProducto">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="personalizar-h">
+                            <button class="accordion-button fs-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapsePersonalizar" aria-expanded="true"
+                                aria-controls="collapsePersonalizar">
+                                Personalizar
+                            </button>
+                        </h2>
+                        <div id="collapsePersonalizar" class="accordion-collapse collapse show"
+                            aria-labelledby="personalizar-h" >
+                            <div class="accordion-body ps-5">
+                                <h5>Ingredientes</h5>
+                                <div class="cont-ingredientes">
+                                    {% for ingrediente in producto.ingredientes_base %}
+                                    <div class="row align-items-center ingrediente_und">
+                                        <div class="col-11">
+                                            <label for="ingrediente{{ingrediente.id_ingrediente}}">
+                                                {{ingrediente.nombre}} x {{'{0}'.format(ingrediente.cantidad| int)}}
+                                            </label>
+                                        </div>
+                                        <div class="col-1">
+                                            <input class="form-check-input" type="checkbox" checked name="ingrediente[]"
+                                                id="ingrediente{{ingrediente.id_ingrediente}}"
+                                                value="{{ingrediente.id_ingrediente}}">
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <br>
+                                <h5>Adiciones</h5>
+                                <div class="cont-ingredientes">
+                                    {% for adicion in producto.adiciones %}
+                                    <div class="row align-items-center adicion_und">
+
+                                        <div class="col-9">
+                                            <span>{{adicion.nombre}} x {{'{0:,}'.format(adicion.precio| int)}}</span>
+                                        </div>
+                                        <div class="col-1 d-flex justify-content-center">
+                                            <a href="#" id="menos_adicion{{adicion.id_adicion}}" class="btn btn-outline-dark disabled menos_adicion"
+                                                data-id="{{adicion.id_adicion}}"><i class="fa-solid fa-minus"></i></a>
+                                        </div>
+                                        <div class="col-1 d-flex justify-content-center">
+                                            <span class="unidad text-center" id="adicion{{adicion.id_adicion}}">0</span>
+                                        </div>
+                                        <div class="col-1 d-flex justify-content-center">
+                                            <a href="#" class="btn btn-outline-dark mas_adicion" data-id="{{adicion.id_adicion}}"><i
+                                                    class="fa-solid fa-plus"></i></a>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="maxAdicion{{adicion.id_adicion}}" value="{{adicion.maximo}}" />
+                                    <input type="hidden" name="adicion[]" id="valAdicion{{adicion.id_adicion}}" value="0" />
+                                    <input type="hidden" name="precioAdicion[]" id="precioAdicion{{adicion.id_adicion}}" value="{{adicion.precio}}}" />
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="total-h">
+                            <button class="accordion-button collapsed fs-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTotal" aria-expanded="false" aria-controls="collapseTotal">
+                                Total
+                            </button>
+                        </h2>
+                        <div id="collapseTotal" class="accordion-collapse collapse" aria-labelledby="total-h">
+                            <div class="accordion-body text-end">
+                                <input type="hidden" id="precioProducto" value="{{producto.producto.precio}}" />
+                                <span class="total">$ {{'{0:,}'.format(producto.producto.precio| int)}}</span><br><br>
+                                <button class="btn btn-success" type="button">Agregar al carrito</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/producto.js')}}"></script>
+
+
+</div>
+{% endblock %}

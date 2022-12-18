@@ -1,0 +1,131 @@
+header {
+    background: #000;
+    color: #fff;
+    padding: 20px 0;
+}
+
+a.iniciar_s, a.carrito, a.logout {
+    color: #FFF;
+    font-size: 35px;
+    display: inline-block;
+    width: 50px;
+}
+
+.nombre_usuario{
+    padding-right: 50px;
+    font-size: 20px;
+}
+
+.restaurantes{
+    padding: 20px 0;
+}
+
+section.restaurantes a {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.5s;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #000;
+    color: #000;
+    margin-bottom: 30px;
+    margin-top: 50px;
+}
+
+section.restaurantes a:hover {
+    box-shadow: 0 0 15px #000;
+}
+
+section.restaurantes h5 {
+    margin-top: 20px;
+}
+
+.cont-foto-menu {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #CCC;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-bottom: 10px;
+}
+.cont-foto-producto {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 1px solid #CCC;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+a.menu-link {
+    color: #000;
+    background: #fbfbfb;
+    display: block;
+    text-decoration: none;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #CCC;
+    transition: all 0.5s;
+}
+
+a.menu-link:hover {
+    box-shadow: 0 0 8px #000;
+}
+
+a.producto-link {
+    color: #000;
+    background: #fbfbfb;
+    display: block;
+    padding-left: 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #CCC;
+    transition: all 0.5s;
+}
+
+a.producto-link:hover {
+    box-shadow: 0 0 8px #000;
+}
+.restaurante {
+    padding: 30px 0px;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 35px;
+}
+.height_max{
+    min-height: calc(100vh - 250px);
+}
+.link-b{
+    color: #000;
+    text-decoration: none;
+}
+.link-a{
+    color: #FFF;
+    text-decoration: none;
+}
+.link-a:hover{
+    color: #FFF;
+    text-decoration: none;
+}
+
+.ingrediente_und, .adicion_und {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.ingrediente_und label, .adicion_und span  {
+    padding: 12px 0;
+    font-size: 19px;
+    display: block;
+    text-transform: capitalize;
+    user-select: none;
+}
+
+span.total {
+    font-size: 45px;
+}

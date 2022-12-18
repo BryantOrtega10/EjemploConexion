@@ -28,6 +28,10 @@ class ProductoModelo:
         res = self.__conector.select(tables=["producto"], limit=limite)
         return res
 
+    def obtener_x_rest(self, fk_restaurante, limite=None):
+        res = self.__conector.select(tables=["producto"], where=' fk_restaurante=%(fk_restaurante)s', values={"fk_restaurante":fk_restaurante}, limit=limite)
+        return res
+    
     def obtenerUno(self, id):
         res = self.__conector.select(tables=["producto"], where=' id_producto=%(id_producto)s',
                                      values={"id_producto": id})

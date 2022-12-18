@@ -1,0 +1,77 @@
+{% extends "base_pag.html" %}
+{% block title %} ROTONDA {% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div class="restaurante">
+        <div class="row">
+            <div class="col-1"><img src="{{url_for('static', filename='uploads/'+restaurante.logo)}}"
+                    alt="{{restaurante.nombre}}" class="w-100" /></div>
+            <div class="col-10">
+                <h1>{{ restaurante.nombre }}</h1>
+            </div>
+        </div>
+    </div>
+    
+    <section class="menus">
+        <div class="row align-items-stretch height_max">
+            <div class="col-2 border-end">
+                <h5>Filtros</h5>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" checked name="tipo_vista" id="tipo_vista_menu">
+                    <label class="form-check-label" for="tipo_vista_menu">
+                        Menus
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tipo_vista" id="tipo_vista_productos">
+                    <label class="form-check-label" for="tipo_vista_productos">
+                        <a href="{{url_for('pagina.pagina_producto_restaurante',id=restaurante.id_restaurante)}}" class="link-b">Productos</a>
+                    </label>
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="row">
+                    {% for menu in lista_menus %}
+                    <div class="col-3">
+                        <a href="{{url_for('pagina.pagina_menu',id=restaurante.id_restaurante, id_m=menu.id_menu)}}" class="menu-link">
+                            <div class="row align-items-center">
+                                <div class="col-12">
+                                    <div class="cont-foto-menu">
+                                        <img src="{{url_for('static', filename='uploads/'+menu.foto)}}"
+                                            alt="{{menu.nombre}}" class="w-100" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="p-2">
+                                        <h5>{{menu.nombre}}</h5>
+                                        <span class="precio">$ {{'{0:,}'.format(menu.precio| int)}}</span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="col-12 text-center">
+                        <h5>No hay menus disponibles para este restaurante</h5>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </section>
+</div>
+{% endblock %}

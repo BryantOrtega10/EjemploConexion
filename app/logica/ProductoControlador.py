@@ -36,6 +36,10 @@ class ProductoControlador:
             respuesta["ingredientes"] = ingredientes
             respuesta["adiciones"] = self.obtener_info_producto_adiciones(id)
         return respuesta
+       
+    def lista_por_restaurante(self, id_rest):
+        productos = self.__modelo.obtener_x_rest(id_rest)
+        return productos
 
     def agregar(self, request):
         foto = ''
@@ -142,7 +146,12 @@ class ProductoControlador:
         infoTabla = producto_ingrediente_base_modelo.obtenerFKIngredientesBase(id_producto)
         for row in infoTabla:
             producto_ingrediente_base = dict(id_ingrediente_base=row['fk_ingrediente_base'],
-                                             auto_select=row["auto_select"])
+                                             auto_select=row["auto_select"],
+                                             cantidad=row["cantidad"],
+                                             id_ingrediente=row["id_ingrediente"],
+                                             nombre=row['nombre'],
+                                             und_medida=row['und_medida'],
+                                             foto=row['foto'])
             respuesta.append(producto_ingrediente_base)
 
         return respuesta
@@ -156,7 +165,12 @@ class ProductoControlador:
         if infoTabla:
             for row in infoTabla:
                 producto_adicion = dict(id_adicion=row['fk_adicion'],
-                                        precio=row['precio'])
+                                        precio=row['precio'],
+                                        maximo=row["maximo"],
+                                        id_ingrediente=row["id_ingrediente"],
+                                        nombre=row['nombre'],
+                                        und_medida=row['und_medida'],
+                                        foto=row['foto'])
                 respuesta.append(producto_adicion)
 
         return respuesta

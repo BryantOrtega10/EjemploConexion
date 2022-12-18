@@ -31,9 +31,14 @@ class ProductoIngredienteBaseModelo:
 
     def obtenerFKIngredientesBase(self, id_producto):
         if id_producto != '':
-            res = self.__conector.select(fields=["fk_ingrediente_base", "auto_select"],
-                                         tables=["producto_ingrediente_base"],
-                                         where="fk_producto=%(id_producto)s",
+            res = self.__conector.select(fields=["producto_ingrediente_base.fk_ingrediente_base", 
+                                                 "producto_ingrediente_base.auto_select", 
+                                                 "ingrediente_base.cantidad",
+                                                 "ingrediente.*"],
+                                         tables=["producto_ingrediente_base", "ingrediente_base", "ingrediente"],
+                                         where="producto_ingrediente_base.fk_ingrediente_base = ingrediente_base.id_ingrediente_base and "\
+                                               "ingrediente_base.fk_ingrediente = ingrediente.id_ingrediente and "\
+                                               "producto_ingrediente_base.fk_producto=%(id_producto)s",
                                          values={"id_producto": id_producto})
             return res
 

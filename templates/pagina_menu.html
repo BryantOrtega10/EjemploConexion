@@ -1,0 +1,466 @@
+{% extends "base_pag.html" %}
+{% block title %} ROTONDA {% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div class="restaurante">
+        <div class="row">
+            <div class="col-1"><img src="{{url_for('static', filename='uploads/'+restaurante.logo)}}"
+                    alt="{{restaurante.nombre}}" class="w-100" /></div>
+            <div class="col-10">
+                <h1>{{ menu.nombre }}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="menu">
+        <div class="row">
+            <div class="col-2">
+                <div class="list-group" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action active" id="list-entrada-list"
+                        data-bs-toggle="list" href="#list-entrada" role="tab" aria-controls="list-entrada">Entrada</a>
+                    <a class="list-group-item list-group-item-action" id="list-plato_fuerte-list" data-bs-toggle="list"
+                        href="#list-plato_fuerte" role="tab" aria-controls="list-plato_fuerte">Plato Fuerte</a>
+                    <a class="list-group-item list-group-item-action" id="list-postre-list" data-bs-toggle="list"
+                        href="#list-postre" role="tab" aria-controls="list-postre">Postre</a>
+                    <a class="list-group-item list-group-item-action" id="list-bebida-list" data-bs-toggle="list"
+                        href="#list-bebida" role="tab" aria-controls="list-bebida">Bebida</a>
+                    <a class="list-group-item list-group-item-action" id="list-bebida-list" data-bs-toggle="list"
+                        href="#list-acompanamiento" role="tab" aria-controls="list-acompanamiento">Acompañamiento</a>
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="list-entrada" role="tabpanel"
+                        aria-labelledby="list-entrada-list">
+                        {% if menu.entrada is not none %}
+                        <div class="producto">
+                            <div class="row">
+                                <div class="col-4">
+                                    <img src="{{url_for('static', filename='uploads/'+menu.entrada.producto.foto)}}" alt="{{menu.entrada.producto.nombre}}"
+                                        class="w-100" />
+                                </div>
+                                <div class="col-8">
+                                    <input type="hidden" class="precioProducto" id="precioProducto{{menu.entrada.producto.id_producto}}" value="{{menu.entrada.producto.precio}}" />
+                                    <div class="accordion" id="accordionProducto">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="personalizar-h">
+                                                <button class="accordion-button fs-3" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapsePersonalizar" aria-expanded="true"
+                                                    aria-controls="collapsePersonalizar">
+                                                    Personalizar
+                                                </button>
+                                            </h2>
+                                            <div id="collapsePersonalizar" class="accordion-collapse collapse show"
+                                                aria-labelledby="personalizar-h" >
+                                                <div class="accordion-body ps-5">
+                                                    <h5>Ingredientes</h5>
+                                                    <div class="cont-ingredientes">
+                                                        {% for ingrediente in menu.entrada.ingredientes_base %}
+                                                        <div class="row align-items-center ingrediente_und">
+                                                            <div class="col-11">
+                                                                <label for="ingrediente{{ingrediente.id_ingrediente}}">
+                                                                    {{ingrediente.nombre}} x {{'{0}'.format(ingrediente.cantidad| int)}}
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-1">
+                                                                <input class="form-check-input" type="checkbox" checked name="ingrediente[]"
+                                                                    id="ingrediente{{ingrediente.id_ingrediente}}"
+                                                                    value="{{ingrediente.id_ingrediente}}">
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <br>
+                                                    <h5>Adiciones</h5>
+                                                    <div class="cont-ingredientes">
+                                                        {% for adicion in menu.entrada.adiciones %}
+                                                        <div class="row align-items-center adicion_und">
+                    
+                                                            <div class="col-9">
+                                                                <span>{{adicion.nombre}} x {{'{0:,}'.format(adicion.precio| int)}}</span>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <a href="#" id="menos_adicion{{adicion.id_adicion}}" class="btn btn-outline-dark disabled menos_adicion"
+                                                                    data-id="{{adicion.id_adicion}}"><i class="fa-solid fa-minus"></i></a>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <span class="unidad text-center" id="adicion{{adicion.id_adicion}}">0</span>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <a href="#" class="btn btn-outline-dark mas_adicion" data-id="{{adicion.id_adicion}}"><i
+                                                                        class="fa-solid fa-plus"></i></a>
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" id="maxAdicion{{adicion.id_adicion}}" value="{{adicion.maximo}}" />
+                                                        <input type="hidden" name="adicion[]" id="valAdicion{{adicion.id_adicion}}" value="0" />
+                                                        <input type="hidden" name="precioAdicion[]" id="precioAdicion{{adicion.id_adicion}}" value="{{adicion.precio}}}" />
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                            <div class="d-flex align-items-center justify-content-center w-100" style="min-height: 400px;">
+                                <button class="btn btn-success">Agregar Entrada</button>
+                            </div>
+                        {% endif %}          
+                    </div>
+                    <div class="tab-pane fade" id="list-plato_fuerte" role="tabpanel"
+                        aria-labelledby="list-plato_fuerte-list">
+                        {% if menu.platoFuerte is not none %}
+                        <div class="producto">
+                            <div class="row">
+                                <div class="col-4">
+                                    <img src="{{url_for('static', filename='uploads/'+menu.platoFuerte.producto.foto)}}" alt="{{menu.platoFuerte.producto.nombre}}"
+                                        class="w-100" />
+                                </div>
+                                <div class="col-8">
+                                    <input type="hidden" class="precioProducto" id="precioProducto{{menu.platoFuerte.producto.id_producto}}" value="{{menu.platoFuerte.producto.precio}}" />
+                                    <div class="accordion" id="accordionProducto">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="personalizar-h">
+                                                <button class="accordion-button fs-3" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapsePersonalizar" aria-expanded="true"
+                                                    aria-controls="collapsePersonalizar">
+                                                    Personalizar
+                                                </button>
+                                            </h2>
+                                            <div id="collapsePersonalizar" class="accordion-collapse collapse show"
+                                                aria-labelledby="personalizar-h" >
+                                                <div class="accordion-body ps-5">
+                                                    <h5>Ingredientes</h5>
+                                                    <div class="cont-ingredientes">
+                                                        {% for ingrediente in menu.platoFuerte.ingredientes_base %}
+                                                        <div class="row align-items-center ingrediente_und">
+                                                            <div class="col-11">
+                                                                <label for="ingrediente{{ingrediente.id_ingrediente}}">
+                                                                    {{ingrediente.nombre}} x {{'{0}'.format(ingrediente.cantidad| int)}}
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-1">
+                                                                <input class="form-check-input" type="checkbox" checked name="ingrediente[]"
+                                                                    id="ingrediente{{ingrediente.id_ingrediente}}"
+                                                                    value="{{ingrediente.id_ingrediente}}">
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <br>
+                                                    <h5>Adiciones</h5>
+                                                    <div class="cont-ingredientes">
+                                                        {% for adicion in menu.platoFuerte.adiciones %}
+                                                        <div class="row align-items-center adicion_und">
+                    
+                                                            <div class="col-9">
+                                                                <span>{{adicion.nombre}} x {{'{0:,}'.format(adicion.precio| int)}}</span>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <a href="#" id="menos_adicion{{adicion.id_adicion}}" class="btn btn-outline-dark disabled menos_adicion"
+                                                                    data-id="{{adicion.id_adicion}}"><i class="fa-solid fa-minus"></i></a>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <span class="unidad text-center" id="adicion{{adicion.id_adicion}}">0</span>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <a href="#" class="btn btn-outline-dark mas_adicion" data-id="{{adicion.id_adicion}}"><i
+                                                                        class="fa-solid fa-plus"></i></a>
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" id="maxAdicion{{adicion.id_adicion}}" value="{{adicion.maximo}}" />
+                                                        <input type="hidden" name="adicion[]" id="valAdicion{{adicion.id_adicion}}" value="0" />
+                                                        <input type="hidden" name="precioAdicion[]" id="precioAdicion{{adicion.id_adicion}}" value="{{adicion.precio}}}" />
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                            <div class="d-flex align-items-center justify-content-center w-100" style="min-height: 400px;">
+                                <button class="btn btn-success">Agregar Plato Fuerte</button>
+                            </div>
+                        {% endif %}    
+
+                    </div>
+                    <div class="tab-pane fade" id="list-postre" role="tabpanel" aria-labelledby="list-postre-list">
+                        {% if menu.postre is not none %}
+                        <div class="producto">
+                            <div class="row">
+                                <div class="col-4">
+                                    <img src="{{url_for('static', filename='uploads/'+menu.postre.producto.foto)}}" alt="{{menu.postre.producto.nombre}}"
+                                        class="w-100" />
+                                </div>
+                                <div class="col-8">
+                                    <input type="hidden" class="precioProducto" id="precioProducto{{menu.postre.producto.id_producto}}" value="{{menu.postre.producto.precio}}" />
+                                    <div class="accordion" id="accordionProducto">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="personalizar-h">
+                                                <button class="accordion-button fs-3" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapsePersonalizar" aria-expanded="true"
+                                                    aria-controls="collapsePersonalizar">
+                                                    Personalizar
+                                                </button>
+                                            </h2>
+                                            <div id="collapsePersonalizar" class="accordion-collapse collapse show"
+                                                aria-labelledby="personalizar-h" >
+                                                <div class="accordion-body ps-5">
+                                                    <h5>Ingredientes</h5>
+                                                    <div class="cont-ingredientes">
+                                                        {% for ingrediente in menu.postre.ingredientes_base %}
+                                                        <div class="row align-items-center ingrediente_und">
+                                                            <div class="col-11">
+                                                                <label for="ingrediente{{ingrediente.id_ingrediente}}">
+                                                                    {{ingrediente.nombre}} x {{'{0}'.format(ingrediente.cantidad| int)}}
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-1">
+                                                                <input class="form-check-input" type="checkbox" checked name="ingrediente[]"
+                                                                    id="ingrediente{{ingrediente.id_ingrediente}}"
+                                                                    value="{{ingrediente.id_ingrediente}}">
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <br>
+                                                    <h5>Adiciones</h5>
+                                                    <div class="cont-ingredientes">
+                                                        {% for adicion in menu.postre.adiciones %}
+                                                        <div class="row align-items-center adicion_und">
+                    
+                                                            <div class="col-9">
+                                                                <span>{{adicion.nombre}} x {{'{0:,}'.format(adicion.precio| int)}}</span>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <a href="#" id="menos_adicion{{adicion.id_adicion}}" class="btn btn-outline-dark disabled menos_adicion"
+                                                                    data-id="{{adicion.id_adicion}}"><i class="fa-solid fa-minus"></i></a>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <span class="unidad text-center" id="adicion{{adicion.id_adicion}}">0</span>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <a href="#" class="btn btn-outline-dark mas_adicion" data-id="{{adicion.id_adicion}}"><i
+                                                                        class="fa-solid fa-plus"></i></a>
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" id="maxAdicion{{adicion.id_adicion}}" value="{{adicion.maximo}}" />
+                                                        <input type="hidden" name="adicion[]" id="valAdicion{{adicion.id_adicion}}" value="0" />
+                                                        <input type="hidden" name="precioAdicion[]" id="precioAdicion{{adicion.id_adicion}}" value="{{adicion.precio}}}" />
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                            <div class="d-flex align-items-center justify-content-center w-100" style="min-height: 400px;">
+                                <button class="btn btn-success">Agregar Postre</button>
+                            </div>
+                        {% endif %}        
+                    
+                    </div>
+                    <div class="tab-pane fade" id="list-bebida" role="tabpanel" aria-labelledby="list-bebida-list">
+                        {% if menu.bebida is not none %}
+                        <div class="producto">
+                            <div class="row">
+                                <div class="col-4">
+                                    <img src="{{url_for('static', filename='uploads/'+menu.bebida.producto.foto)}}" alt="{{menu.bebida.producto.nombre}}"
+                                        class="w-100" />
+                                </div>
+                                <div class="col-8">
+                                    <input type="hidden" class="precioProducto" id="precioProducto{{menu.bebida.producto.id_producto}}" value="{{menu.bebida.producto.precio}}" />
+                                    <div class="accordion" id="accordionProducto">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="personalizar-h">
+                                                <button class="accordion-button fs-3" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapsePersonalizar" aria-expanded="true"
+                                                    aria-controls="collapsePersonalizar">
+                                                    Personalizar
+                                                </button>
+                                            </h2>
+                                            <div id="collapsePersonalizar" class="accordion-collapse collapse show"
+                                                aria-labelledby="personalizar-h" >
+                                                <div class="accordion-body ps-5">
+                                                    <h5>Ingredientes</h5>
+                                                    <div class="cont-ingredientes">
+                                                        {% for ingrediente in menu.bebida.ingredientes_base %}
+                                                        <div class="row align-items-center ingrediente_und">
+                                                            <div class="col-11">
+                                                                <label for="ingrediente{{ingrediente.id_ingrediente}}">
+                                                                    {{ingrediente.nombre}} x {{'{0}'.format(ingrediente.cantidad| int)}}
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-1">
+                                                                <input class="form-check-input" type="checkbox" checked name="ingrediente[]"
+                                                                    id="ingrediente{{ingrediente.id_ingrediente}}"
+                                                                    value="{{ingrediente.id_ingrediente}}">
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <br>
+                                                    <h5>Adiciones</h5>
+                                                    <div class="cont-ingredientes">
+                                                        {% for adicion in menu.bebida.adiciones %}
+                                                        <div class="row align-items-center adicion_und">
+                    
+                                                            <div class="col-9">
+                                                                <span>{{adicion.nombre}} x {{'{0:,}'.format(adicion.precio| int)}}</span>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <a href="#" id="menos_adicion{{adicion.id_adicion}}" class="btn btn-outline-dark disabled menos_adicion"
+                                                                    data-id="{{adicion.id_adicion}}"><i class="fa-solid fa-minus"></i></a>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <span class="unidad text-center" id="adicion{{adicion.id_adicion}}">0</span>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <a href="#" class="btn btn-outline-dark mas_adicion" data-id="{{adicion.id_adicion}}"><i
+                                                                        class="fa-solid fa-plus"></i></a>
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" id="maxAdicion{{adicion.id_adicion}}" value="{{adicion.maximo}}" />
+                                                        <input type="hidden" name="adicion[]" id="valAdicion{{adicion.id_adicion}}" value="0" />
+                                                        <input type="hidden" name="precioAdicion[]" id="precioAdicion{{adicion.id_adicion}}" value="{{adicion.precio}}}" />
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                            <div class="d-flex align-items-center justify-content-center w-100" style="min-height: 400px;">
+                                <button class="btn btn-success">Agregar Bebida</button>
+                            </div>
+                        {% endif %}       
+                    </div>
+                    <div class="tab-pane fade" id="list-acompanamiento" role="tabpanel"
+                        aria-labelledby="list-acompanamiento-list">
+                        {% if menu.acompanamiento is not none %}
+                        <div class="producto">
+                            <div class="row">
+                                <div class="col-4">
+                                    <img src="{{url_for('static', filename='uploads/'+menu.acompanamiento.producto.foto)}}" alt="{{menu.acompanamiento.producto.nombre}}"
+                                        class="w-100" />
+                                </div>
+                                <div class="col-8">
+                                    <input type="hidden" class="precioProducto" id="precioProducto{{menu.acompanamiento.producto.id_producto}}" value="{{menu.acompanamiento.producto.precio}}" />
+                                    <div class="accordion" id="accordionProducto">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="personalizar-h">
+                                                <button class="accordion-button fs-3" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapsePersonalizar" aria-expanded="true"
+                                                    aria-controls="collapsePersonalizar">
+                                                    Personalizar
+                                                </button>
+                                            </h2>
+                                            <div id="collapsePersonalizar" class="accordion-collapse collapse show"
+                                                aria-labelledby="personalizar-h" >
+                                                <div class="accordion-body ps-5">
+                                                    <h5>Ingredientes</h5>
+                                                    <div class="cont-ingredientes">
+                                                        {% for ingrediente in menu.acompanamiento.ingredientes_base %}
+                                                        <div class="row align-items-center ingrediente_und">
+                                                            <div class="col-11">
+                                                                <label for="ingrediente{{ingrediente.id_ingrediente}}">
+                                                                    {{ingrediente.nombre}} x {{'{0}'.format(ingrediente.cantidad| int)}}
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-1">
+                                                                <input class="form-check-input" type="checkbox" checked name="ingrediente[]"
+                                                                    id="ingrediente{{ingrediente.id_ingrediente}}"
+                                                                    value="{{ingrediente.id_ingrediente}}">
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <br>
+                                                    <h5>Adiciones</h5>
+                                                    <div class="cont-ingredientes">
+                                                        {% for adicion in menu.acompanamiento.adiciones %}
+                                                        <div class="row align-items-center adicion_und">
+                    
+                                                            <div class="col-9">
+                                                                <span>{{adicion.nombre}} x {{'{0:,}'.format(adicion.precio| int)}}</span>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <a href="#" id="menos_adicion{{adicion.id_adicion}}" class="btn btn-outline-dark disabled menos_adicion"
+                                                                    data-id="{{adicion.id_adicion}}"><i class="fa-solid fa-minus"></i></a>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <span class="unidad text-center" id="adicion{{adicion.id_adicion}}">0</span>
+                                                            </div>
+                                                            <div class="col-1 d-flex justify-content-center">
+                                                                <a href="#" class="btn btn-outline-dark mas_adicion" data-id="{{adicion.id_adicion}}"><i
+                                                                        class="fa-solid fa-plus"></i></a>
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" id="maxAdicion{{adicion.id_adicion}}" value="{{adicion.maximo}}" />
+                                                        <input type="hidden" name="adicion[]" id="valAdicion{{adicion.id_adicion}}" value="0" />
+                                                        <input type="hidden" name="precioAdicion[]" id="precioAdicion{{adicion.id_adicion}}" value="{{adicion.precio}}}" />
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                            <div class="d-flex align-items-center justify-content-center w-100" style="min-height: 400px;">
+                                <button class="btn btn-success">Agregar Acompañamiento</button>
+                            </div>
+                        {% endif %}      
+                    </div>
+                </div>
+                <div class="accordion" id="accordionProducto">
+                    <input type="hidden" class="precioMenu" id="precioMenu" value="{{menu.menu.precio}}" />
+                    <input type="hidden" class="tipoMenu" id="tipoMenu" value="{{menu.tipo}}" />
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="total-h">
+                            <button class="accordion-button fs-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTotal" aria-expanded="true" aria-controls="collapseTotal">
+                                Total
+                            </button>
+                        </h2>
+                        <div id="collapseTotal" class="accordion-collapse" aria-labelledby="total-h">
+                            <div class="accordion-body text-end">                                
+                                <span class="total">$ {{'{0:,}'.format(menu.menu.precio| int)}}</span><br><br>
+                                <button class="btn btn-success" type="button">Agregar al carrito</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/menu.js')}}"></script>
+
+
+</div>
+{% endblock %}
