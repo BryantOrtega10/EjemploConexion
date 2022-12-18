@@ -53,8 +53,6 @@ class MysqlConnection(Connector):
         except mysql.connector.Error as e:
             return {'success':False, 'error' : str(e)}
 
-
-
     def delete(self, table, where='', values={}):
         try:
             sql = "DELETE FROM " + table + " WHERE " + where
@@ -83,5 +81,8 @@ class MysqlConnection(Connector):
 
     def set_autocommit(self, value):
         self.__connector.autocommit = value
+
+    def get_last_id(self):
+        return self.__cursor.lastrowid
 
 

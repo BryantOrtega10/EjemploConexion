@@ -18,6 +18,7 @@ class MenuModelo:
         res = self.__conector.insert("menu", {"nombre": nombre, "foto": foto, "precio": precio, "fk_restaurante": id_restaurante})
         if res['success'] == True:
             self.__conector.commit()
+            res['row_id'] = self.__conector.get_last_id()
 
         return res
 

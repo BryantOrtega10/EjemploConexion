@@ -45,5 +45,12 @@ class ProductoIngredienteBaseModelo:
     def modificar(self):
         pass
 
-    def eliminar(self):
-        pass
+    def eliminarPorProducto(self, id_producto):
+        res = self.__conector.delete(table='producto_ingrediente_base',
+                                     where='fk_producto=%(id_producto)s',
+                                     values={'id_producto': id_producto})
+
+        if res['success'] == True:
+            self.__conector.commit()
+
+        return res

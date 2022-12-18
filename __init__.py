@@ -2,11 +2,14 @@ from flask import Flask, session
 from flask_session import Session
 
 from app.vistas.ingredientes import ingredientes_bp
+
+from app.vistas.productos import productos_bp
 from app.vistas.pagina import pagina_bp
 from conf.config import DevelpmentConfig
 
 ACTIVE_ENDPOINTS = [
-    ('/ingredientes',ingredientes_bp),
+    ('/ingredientes', ingredientes_bp),
+    ('/productos', productos_bp),
     ('/',pagina_bp)
 ]
 

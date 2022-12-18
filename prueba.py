@@ -1,3 +1,4 @@
+from app.logica.MenuControlador import MenuControlador
 from app.logica.ProductoControlador import ProductoControlador
 from app.objetos_sesion.Adicion import Adicion
 from app.objetos_sesion.PlatoFuerte import PlatoFuerte
@@ -76,11 +77,64 @@ from app.objetos_sesion.Carrito import Carrito
 
 # pruebas aparte
 from app.datos.ProductoIngreBaseModelo import ProductoIngredienteBaseModelo
+from app.logica.ProductoControlador import ProductoControlador
 
-# carrito = Carrito()
-# carrito.setBdInfoCarrito(1)
-# for itemCarrito in carrito.getItemsCarrito():
-#     print(itemCarrito.getIdItemCarrito())
+ingredientes_base = [
+    {
+        'id_ingrediente_base': 101,
+        'auto_select': 1,
+        'cantidad': 500,
+        'id_ingrediente': 100
+    },
+    {
+        'id_ingrediente_base': 102,
+        'auto_select': 1,
+        'cantidad': 3,
+        'id_ingrediente': 101
+    },
+    {
+        'id_ingrediente_base': 103,
+        'auto_select': 1,
+        'cantidad': 20,
+        'id_ingrediente': 102
+    }
+]
+adiciones = [
+    {
+        'id_adicion': 101,
+        'precio': 5000
+    },
+    {
+        'id_adicion': 213,
+        'precio': 9900
+    }
+]
+request = {
+    'nombre': 'PASTA BOLOÑESA',
+    'precio': 20000,
+    'tipo': 1,
+    'foto': 'pastaBoloniesa.jpg',
+    'maximo_ingredientes_base': 0,
+    'aplica_maximo': 0,
+    'minimo_ingredientes_base': 0,
+    'aplica_minimo': 0,
+    'id_restaurante': 3,
+    'adiciones': adiciones,
+    'ingredientes_base': ingredientes_base,
 
+}
 
-
+productos = [
+    {'id_producto': 101},
+    {'id_producto': 102}
+]
+requestMenu = {
+    'nombre': 'COMBO PASTA BOLOÑESA',
+    'foto': 'comboPastaBoloniesa.png',
+    'precio': 22000,
+    'id_restaurante': 3,
+    'productos': productos
+}
+menuPrueba = MenuControlador()
+# print(menuPrueba.tempAgregar(requestMenu))
+print(menuPrueba.eliminar(1012))

@@ -13,7 +13,7 @@ class ProductoAdicionModelo:
             if item == '':
                 return {'success': False, 'error': f"{keys[i]} vacio"}
 
-        res = self.__conector.insert("producto_ingrediente_base", {"fk_producto": id_producto,
+        res = self.__conector.insert("producto_adicion", {"fk_producto": id_producto,
                                                                    "fk_adicion": id_adicion,
                                                                    "precio": precio})
         if res['success'] == True:
@@ -33,3 +33,13 @@ class ProductoAdicionModelo:
                                                " producto_adicion.fk_producto=%(id_producto)s",
                                          values={"id_producto": id_producto})
             return res
+
+    def eliminarPorProducto(self, id_producto):
+        res = self.__conector.delete(table='producto_adicion',
+                                     where='fk_producto=%(id_producto)s',
+                                     values={'id_producto': id_producto})
+
+        if res['success'] == True:
+            self.__conector.commit()
+
+        return res

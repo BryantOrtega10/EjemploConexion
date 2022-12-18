@@ -13,14 +13,14 @@ class ProductoModelo:
         for (i, item) in enumerate(values):
             if item == '':
                 return {'success': False, 'error': f"{keys[i]} vacio"}
-
         res = self.__conector.insert("producto", {"nombre": nombre, "precio": precio, "tipo": tipo, "foto": foto,
                                                   "maximo_ingredientes_base": maximo_ingredientes_base,
                                                   "aplica_maximo": aplica_maximo,
                                                   "minimo_ingredientes_base": minimo_ingredientes_base,
-                                                  "aplica_minimo": aplica_minimo, "id_restaurante": id_restaurante})
+                                                  "aplica_minimo": aplica_minimo, "fk_restaurante": id_restaurante})
         if res['success'] == True:
             self.__conector.commit()
+            res['row_id'] = self.__conector.get_last_id()
 
         return res
 
@@ -67,7 +67,7 @@ class ProductoModelo:
             return {'success': False, 'error': "Id producto vacio"}
 
         res = self.__conector.delete("producto",
-                                     " id_producto=%(id_producto)s ",
+                                     "id_producto=%(id_producto)s",
                                      {"id_producto": id_producto})
 
         if res['success'] == True:
