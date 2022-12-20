@@ -9,7 +9,7 @@ class MysqlConnection(Connector):
         self.__connector = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="",
+            password="", # Aqui va la contraseña del root de la instalacion de MySql
             database="rotonda"
         )
         self.__cursor = self.__connector.cursor(dictionary=True)
