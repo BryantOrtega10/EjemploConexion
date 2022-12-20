@@ -4,7 +4,7 @@ from app.objetos_sesion.IngredienteBase import IngredienteBase
 
 class Producto:
     
-    def __init__(self, idProducto="", nombre="", precio=0, foto="", tipoProducto="", ingredientes=[], ingredientes_base=[], ingredientesSeleccionados=[], adiciones=[], adicionesSeleccionadas=[], maxIngBase="", aplicaMax="", minIngBase="", aplicaMin="", fkRestaurante=""):
+    def __init__(self, idProducto="", nombre="", precio=0, foto="", tipoProducto="", ingredientes=[], ingredientesSeleccionados=[], adiciones=[], adicionesSeleccionadas=[], maxIngBase="", aplicaMax="", minIngBase="", aplicaMin="", fkRestaurante="", ingredientes_base=[]):
         self.__idProducto = idProducto
         self.__nombre = nombre
         self.__precio = precio

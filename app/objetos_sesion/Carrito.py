@@ -108,7 +108,6 @@ class Carrito:
             if cuentaMismosProductos == len(productos) and cuentaMismosProductos == len(productosMenu):
                 precioItem = precioPorMenuBasico
 
-            print("precio item ", precioItem)
             precioAdiciones = 0
             for producto in productos:
                 adiciones = producto.getAdicionesSeleccionadas()
@@ -116,8 +115,6 @@ class Carrito:
                     precioAdiciones += adicion.getPrecio()
 
             precioItem += precioAdiciones
-
-            print("precio adicion ", precioAdiciones)
             precioCarrito += precioItem
 
         return precioCarrito
